@@ -44,6 +44,6 @@
          </columns>
       </TableView>
       <Button fx:id="Back" layoutX="390.0" layoutY="530.0" mnemonicParsing="false" onAction="#backButton" prefHeight="27.0" prefWidth="62.0" text="Back" />
-      <Button fx:id="LogOut" layoutX="487.0" layoutY="530.0" mnemonicParsing="false" onAction="#logOutButon" prefHeight="27.0" prefWidth="62.0" text="Log Out" />
+      <Button fx:id="LogOut" layoutX="487.0" layoutY="530.0" mnemonicParsing="false" onAction="#logOutButton" prefHeight="27.0" prefWidth="62.0" text="Log Out" />
    </children>
 </AnchorPane>

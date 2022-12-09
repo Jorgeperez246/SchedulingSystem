@@ -39,6 +39,6 @@
       <Button fx:id="Add" layoutX="64.0" layoutY="518.0" mnemonicParsing="false" onAction="#addButton" text="Add" />
       <Button fx:id="Modify" layoutX="127.0" layoutY="518.0" mnemonicParsing="false" onAction="#modifyButton" text="Modify" />
       <Button fx:id="Delete" layoutX="208.0" layoutY="518.0" mnemonicParsing="false" onAction="#deleteButton" text="Delete" />
-      <Button fx:id="Logout" layoutX="822.0" layoutY="518.0" mnemonicParsing="false" onAction="#logoutButton" text="Log Out" />
+      <Button fx:id="Back" layoutX="822.0" layoutY="518.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
    </children>
 </AnchorPane>
