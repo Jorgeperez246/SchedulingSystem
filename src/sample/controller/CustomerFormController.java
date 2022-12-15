@@ -59,6 +59,8 @@ public class CustomerFormController {
 
 
     public void initialize() throws SQLException {
+        Connection connection = JDBC.getConnection();
+
 
         ObservableList<Customer> allCustomersList = CustomerDB.getAllCustomers();
 

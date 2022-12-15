@@ -1,0 +1,31 @@
+package sample.DAO;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import sample.model.FirstLevelDivision;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class FirstLevelDivisionDB extends FirstLevelDivision {
+    public FirstLevelDivisionDB(String divisionName, int divisionID, int country_ID) {
+        super(divisionName,divisionID, country_ID);
+    }
+
+
+    public static ObservableList<FirstLevelDivisionDB> getAllFirstLevelDivisions() throws SQLException {
+        ObservableList<FirstLevelDivisionDB> firstLevelDivisionsObservableList = FXCollections.observableArrayList();
+        String sql = "SELECT * from first_level_divisions";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            int divisionID = rs.getInt("Division_ID");
+            String divisionName = rs.getString("Division");
+            int country_ID = rs.getInt("COUNTRY_ID");
+            FirstLevelDivisionDB firstLevelDivision = new FirstLevelDivisionDB( divisionName,divisionID, country_ID);
+            firstLevelDivisionsObservableList.add(firstLevelDivision);
+        }
+        return firstLevelDivisionsObservableList;
+    }
+}
