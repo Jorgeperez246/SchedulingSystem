@@ -2,20 +2,21 @@ package sample.DAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import sample.model.Appointment;
+import sample.model.Country;
 import sample.model.Customer;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 
 public class CustomerDB {
 
     public static ObservableList<Customer> getAllCustomers() throws SQLException {
         ObservableList<Customer> customersObservableList = FXCollections.observableArrayList();
-        String sql = "SELECT customers.*,first_level_divisions.Division from customers INNER JOIN  first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID";
+        String sql = "SELECT customers.*, first_level_divisions.Division, countries.Country\n" +
+                "FROM customers\n" +
+                "INNER JOIN first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID\n" +
+                "INNER JOIN countries ON first_level_divisions.Country_ID = countries.Country_ID";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
@@ -26,9 +27,12 @@ public class CustomerDB {
             String customerPost = rs.getString("Postal_Code");
             String customerPhone = rs.getString("Phone");
             String divisionName = rs.getString("Division");
+            String countryName = rs.getString("Country");
 
 
-            Customer customer = new Customer(divisionName, customerPhone, customerAdd, customerId, customerName, customerPost);
+
+
+            Customer customer = new Customer(divisionName, customerPhone, customerAdd, customerId, customerName, customerPost, countryName);
             customersObservableList.add(customer);
         }
 

@@ -1,5 +1,6 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -12,8 +13,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import sample.DAO.CountryDB;
 import sample.DAO.CustomerDB;
+import sample.DAO.FirstLevelDivisionDB;
 import sample.DAO.JDBC;
+import sample.model.Country;
 import sample.model.Customer;
 
 import java.io.IOException;
@@ -23,6 +27,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CustomerFormController {
+    private int index = 0;
     public TableView<Customer> CustomerTable;
     public TableColumn<?,?> IdCol;
     public TableColumn<?,?> NameCol;
@@ -44,7 +49,31 @@ public class CustomerFormController {
     }
 
     public void modifyButton(ActionEvent event) {
+        try {
+            JDBC.makeConnection();
+            Customer selectedCustomer = CustomerTable.getSelectionModel().getSelectedItem();
+
+
+
+            if (selectedCustomer != null) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/sample/view/ModifyCustomerForm.fxml"));
+                loader.load();
+
+                ModifyCustomerFormController Controller = loader.getController();
+                Controller.sendCustomerToModify(CustomerTable.getSelectionModel().getSelectedIndex(),CustomerTable.getSelectionModel().getSelectedItem());
+
+                Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                Parent scene = loader.getRoot();
+                stage.setScene(new Scene(scene));
+                stage.show();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
     public void deleteButton(ActionEvent event) {
     }
@@ -73,4 +102,6 @@ public class CustomerFormController {
 
         CustomerTable.setItems(allCustomersList);
     }
+
+
 }

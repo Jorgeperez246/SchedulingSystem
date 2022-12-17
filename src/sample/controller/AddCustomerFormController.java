@@ -59,8 +59,10 @@ public class AddCustomerFormController {
                 for (FirstLevelDivisionDB firstLevelDivision : FirstLevelDivisionDB.getAllFirstLevelDivisions()) {
                     if (State.getSelectionModel().getSelectedItem().equals(firstLevelDivision.getDivisionName())) {
                         firstLevelDivisionName = firstLevelDivision.getDivisionId();
+
                     }
                 }
+
                 String insertStatement = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
                 JDBC.makePreparedStatement(insertStatement, JDBC.getConnection());
                 PreparedStatement ps = JDBC.getPreparedStatement();
@@ -74,6 +76,8 @@ public class AddCustomerFormController {
                 ps.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
                 ps.setString(9, "admin");
                 ps.setInt(10, firstLevelDivisionName);
+
+
                 ps.execute();
 
                 CustomerId.clear();
@@ -109,6 +113,8 @@ public class AddCustomerFormController {
         firstLevelDivisionObservableList.forEach(firstLevelDivisionDB -> allFirstLevelDivisionNames.add(firstLevelDivisionDB.getDivisionName()));
         Country.setItems(allCountryNames);
         State.setItems(allFirstLevelDivisionNames);
+
+
 
     }
 }
