@@ -28,12 +28,12 @@ public class AddAppointmentFormController {
     public Label AppointmentSTLabel;
     public Label AppointmentETLabel;
     public DatePicker AppointmentStartDate;
-    public ComboBox AppointmentType;
-    public ComboBox AppointmentStartTime;
-    public ComboBox AppointmentEndTime;
-    public ComboBox AppointmentContact;
-    public ComboBox AppointmentCustomer;
-    public ComboBox AppointmentUser;
+    public ComboBox<String> AppointmentType;
+    public ComboBox<String> AppointmentStartTime;
+    public ComboBox<String> AppointmentEndTime;
+    public ComboBox<String> AppointmentContact;
+    public ComboBox<String> AppointmentCustomer;
+    public ComboBox<String> AppointmentUser;
     public DatePicker AppointmentEndDate;
     public Button Cancel;
     public Button Save;

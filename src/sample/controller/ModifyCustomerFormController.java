@@ -12,6 +12,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import sample.DAO.CountryDB;
+import sample.DAO.CustomerDB;
 import sample.DAO.FirstLevelDivisionDB;
 import sample.DAO.JDBC;
 import sample.model.Country;
@@ -51,11 +52,11 @@ public class ModifyCustomerFormController {
         try {
             Connection connection = JDBC.getConnection();
 
+
             if (!CustomerName.getText().isEmpty() || !CustomerAddress.getText().isEmpty() || !PostalCode.getText().isEmpty() || !PhoneNumber.getText().isEmpty() || !Country.getValue().isEmpty() || !State.getValue().isEmpty())
             {
 
-                //create random ID for new customer id
-                Integer newCustomerID = (int) (Math.random() * 100);
+
 
                 int firstLevelDivisionName = 0;
                 for (FirstLevelDivisionDB firstLevelDivision : FirstLevelDivisionDB.getAllFirstLevelDivisions()) {
@@ -63,16 +64,11 @@ public class ModifyCustomerFormController {
                         firstLevelDivisionName = firstLevelDivision.getDivisionId();
                     }
                 }
-                int countryName = 0;
-                for (CountryDB country : CountryDB.getCountries()) {
-                    if (Country.getSelectionModel().getSelectedItem().equals(country.getCountryName())) {
-                        countryName = country.getCountryId();
-                    }
-                }
+
                 String insertStatement = "UPDATE customers SET Customer_ID = ?, Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Create_Date = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ?, Division_ID = ? WHERE Customer_ID = ?";
                 JDBC.makePreparedStatement(insertStatement, JDBC.getConnection());
                 PreparedStatement ps = JDBC.getPreparedStatement();
-                ps.setInt(1, newCustomerID);
+                ps.setInt(1, Integer.parseInt(CustomerId.getText()));
                 ps.setString(2, CustomerName.getText());
                 ps.setString(3, CustomerAddress.getText());
                 ps.setString(4, PostalCode.getText());
@@ -82,6 +78,7 @@ public class ModifyCustomerFormController {
                 ps.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
                 ps.setString(9, "admin");
                 ps.setInt(10, firstLevelDivisionName);
+                ps.setInt(11,Integer.parseInt(CustomerId.getText()));
                 ps.execute();
 
                 CustomerId.clear();
@@ -121,6 +118,8 @@ public class ModifyCustomerFormController {
 
     public void initialize() throws SQLException {
         String selectedCountry = Country.getSelectionModel().getSelectedItem();
+
+        ObservableList<Customer> allCustomersList = CustomerDB.getAllCustomers();
 
         ObservableList<CountryDB> countriesObservableList = CountryDB.getCountries();
         ObservableList<String> allCountryNames = FXCollections.observableArrayList();
