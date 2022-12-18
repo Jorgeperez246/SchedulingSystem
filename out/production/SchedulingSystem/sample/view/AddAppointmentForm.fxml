@@ -81,7 +81,6 @@
          </font>
       </Label>
       <DatePicker fx:id="AppointmentStartDate" layoutX="241.0" layoutY="433.0" onAction="#addAppointmentStartDate" prefHeight="25.0" prefWidth="218.0" />
-      <ComboBox fx:id="AppointmentType" layoutX="241.0" layoutY="200.0" onAction="#addAppointmentType" prefHeight="25.0" prefWidth="218.0" />
       <ComboBox fx:id="AppointmentStartTime" layoutX="241.0" layoutY="484.0" onAction="#addAppointmentStartTime" prefHeight="25.0" prefWidth="218.0" />
       <ComboBox fx:id="AppointmentEndTime" layoutX="241.0" layoutY="574.0" onAction="#addAppointmentEndTime" prefHeight="25.0" prefWidth="218.0" />
       <ComboBox fx:id="AppointmentContact" layoutX="241.0" layoutY="621.0" onAction="#addAppointmentContact" prefHeight="25.0" prefWidth="218.0" />
@@ -90,5 +89,6 @@
       <DatePicker fx:id="AppointmentEndDate" layoutX="241.0" layoutY="530.0" onAction="#addAppointmentEndDate" prefHeight="25.0" prefWidth="218.0" />
       <Button fx:id="Cancel" layoutX="265.0" layoutY="816.0" mnemonicParsing="false" onAction="#cancelButton" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
       <Button fx:id="Save" layoutX="374.0" layoutY="816.0" mnemonicParsing="false" onAction="#saveButton" prefHeight="25.0" prefWidth="61.0" text="Save" />
+      <TextField fx:id="AppointmentType" layoutX="241.0" layoutY="200.0" onAction="#addAppointmentLocation" prefHeight="25.0" prefWidth="218.0" />
    </children>
 </AnchorPane>

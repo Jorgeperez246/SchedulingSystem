@@ -11,7 +11,7 @@ import java.sql.Statement;
 
 public class UserCredentials extends User {
     public UserCredentials(int userID, String userName, String userPassword) {
-        super();
+        super(userID,userName,userPassword);
     }
 
     public static int userValidation(String Username, String Password) {
