@@ -11,7 +11,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import sample.DAO.AppointmentDB;
+import sample.DAO.JDBC;
 import sample.model.Appointment;
+import sample.model.Customer;
 
 import java.io.IOException;
 import java.net.URL;
@@ -50,7 +52,31 @@ public class AppointmentFormController{
     }
 
     public void modifyButton(ActionEvent event) {
+        try {
+            JDBC.makeConnection();
+            Appointment selectedAppointment = AppointmentTable.getSelectionModel().getSelectedItem();
+
+
+
+            if (selectedAppointment != null) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/sample/view/ModifyAppointmentForm.fxml"));
+                loader.load();
+
+                ModifyAppointmentFormController Controller = loader.getController();
+                Controller.sendAppointmentToModify(AppointmentTable.getSelectionModel().getSelectedIndex(),AppointmentTable.getSelectionModel().getSelectedItem());
+
+                Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                Parent scene = loader.getRoot();
+                stage.setScene(new Scene(scene));
+                stage.show();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
     public void deleteButton(ActionEvent event) {
     }

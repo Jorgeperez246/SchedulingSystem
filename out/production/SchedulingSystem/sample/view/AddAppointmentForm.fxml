@@ -66,7 +66,7 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="AppointmentIdText" layoutX="241.0" layoutY="123.0" onAction="#addAppointmentId" prefHeight="25.0" prefWidth="164.0" />
+      <TextField fx:id="AppointmentIdText" disable="true" editable="false" layoutX="241.0" layoutY="123.0" onAction="#addAppointmentId" prefHeight="25.0" prefWidth="164.0" promptText="Auto-Generated" />
       <TextField fx:id="AppointmentTitleText" layoutX="241.0" layoutY="161.0" onAction="#addAppointmentTitle" prefHeight="25.0" prefWidth="164.0" />
       <TextArea fx:id="Description" layoutX="241.0" layoutY="254.0" prefHeight="89.0" prefWidth="309.0" />
       <TextField fx:id="AppointmentLocationText" layoutX="241.0" layoutY="379.0" onAction="#addAppointmentLocation" prefHeight="25.0" prefWidth="218.0" />

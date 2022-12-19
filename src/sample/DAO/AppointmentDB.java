@@ -13,7 +13,11 @@ import java.time.LocalDateTime;
 public class AppointmentDB {
     public static ObservableList<Appointment> getAllAppointments() throws SQLException {
         ObservableList<Appointment> appointmentsObservableList = FXCollections.observableArrayList();
-        String sql = "SELECT * from appointments";
+        String sql = "SELECT appointments.*, customers.Customer_Name, users.User_Name, contacts.Contact_Name\n" +
+                "FROM appointments\n" +
+                "INNER JOIN customers ON appointments.Customer_ID = customers.Customer_ID\n" +
+                "INNER JOIN users ON appointments.User_ID = users.User_ID\n" +
+                "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
@@ -27,7 +31,10 @@ public class AppointmentDB {
             int customerId = rs.getInt("Customer_ID");
             int userId = rs.getInt("User_ID");
             int contactId = rs.getInt("Contact_ID");
-            Appointment appointment = new Appointment(appointmentId, customerId, userId, contactId, end, start, title, descr, type, loc);
+            String contactName = rs.getString("Contact_Name");
+            String userName = rs.getString("User_Name");
+            String customerName = rs.getString("Customer_Name");
+            Appointment appointment = new Appointment(appointmentId, customerId, userId, contactId, end, start, title, descr, type, loc,contactName,userName,customerName);
             appointmentsObservableList.add(appointment);
         }
 

@@ -174,6 +174,9 @@ public class AddAppointmentFormController {
                 ps.execute();
 
 
+
+
+
                 Parent root = FXMLLoader.load(getClass().getResource("/sample/view/AppointmentForm.fxml"));
                 Scene scene = new Scene(root);
                 Stage MainScreenReturn = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -210,7 +213,7 @@ public class AddAppointmentFormController {
         LocalTime firstAppointment = LocalTime.MIN.plusHours(8);
         LocalTime lastAppointment = LocalTime.MAX.minusHours(1).minusMinutes(45);
 
-        
+
         if (!firstAppointment.equals(0) || !lastAppointment.equals(0)) {
             while (firstAppointment.isBefore(lastAppointment)) {
                 appointmentTimes.add(String.valueOf(firstAppointment));
