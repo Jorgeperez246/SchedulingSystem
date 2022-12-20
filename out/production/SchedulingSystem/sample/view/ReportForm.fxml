@@ -8,16 +8,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="939.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.ReportFormController">
    <children>
-      <TableView fx:id="AppointmentInfoTable" layoutX="66.0" layoutY="81.0" prefHeight="200.0" prefWidth="807.0">
+      <TableView fx:id="AppointmentInfoTable" layoutX="66.0" layoutY="81.0" prefHeight="200.0" prefWidth="504.0">
         <columns>
           <TableColumn fx:id="AppMonthCol" prefWidth="154.0" text="Appointment Month" />
           <TableColumn fx:id="AppTypeCol" minWidth="8.0" prefWidth="176.0" text="Appointment Type" />
-            <TableColumn fx:id="DivisionCol" prefWidth="171.0" text="Division Name" />
-            <TableColumn fx:id="TotAppCol" prefWidth="163.0" text="Total Appointments" />
-            <TableColumn fx:id="TotCustomerCol" prefWidth="142.0" text="Total Customers" />
+            <TableColumn fx:id="MonthTotalAppCol" prefWidth="171.0" text="Total Appointments" />
         </columns>
       </TableView>
       <Label layoutX="38.0" layoutY="26.0" text="Reports">
@@ -25,7 +22,7 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <ComboBox fx:id="ContactCombo" layoutX="723.0" layoutY="46.0" prefWidth="150.0" />
+      <ComboBox fx:id="ContactCombo" layoutX="723.0" layoutY="46.0" onAction="#getAppointmentInfo" prefWidth="150.0" />
       <Label layoutX="602.0" layoutY="45.0" text="Contact">
          <font>
             <Font size="18.0" />
@@ -45,5 +42,11 @@
       </TableView>
       <Button fx:id="Back" layoutX="390.0" layoutY="530.0" mnemonicParsing="false" onAction="#backButton" prefHeight="27.0" prefWidth="62.0" text="Back" />
       <Button fx:id="LogOut" layoutX="487.0" layoutY="530.0" mnemonicParsing="false" onAction="#logOutButton" prefHeight="27.0" prefWidth="62.0" text="Log Out" />
+      <TableView fx:id="CountryAppointments" layoutX="602.0" layoutY="81.0" prefHeight="200.0" prefWidth="272.0">
+         <columns>
+            <TableColumn fx:id="CountryCol" prefWidth="136.0" text="Country" />
+            <TableColumn fx:id="CountryTotalAppCol" minWidth="8.0" prefWidth="135.0" text="Total Appointments" />
+         </columns>
+      </TableView>
    </children>
 </AnchorPane>

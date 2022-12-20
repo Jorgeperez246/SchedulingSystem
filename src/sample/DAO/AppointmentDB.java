@@ -17,7 +17,8 @@ public class AppointmentDB {
                 "FROM appointments\n" +
                 "INNER JOIN customers ON appointments.Customer_ID = customers.Customer_ID\n" +
                 "INNER JOIN users ON appointments.User_ID = users.User_ID\n" +
-                "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID";
+                "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID\n" +
+                "Order by Appointment_ID asc";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {

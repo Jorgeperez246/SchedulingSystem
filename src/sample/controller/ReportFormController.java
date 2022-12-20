@@ -1,6 +1,9 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -9,29 +12,42 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import sample.DAO.*;
+import sample.DAO.ReportCountriesDB;
+import sample.model.Appointment;
+import sample.model.Contact;
+import sample.model.ReportCountries;
+import sample.model.ReportMonth;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.time.Month;
 
 public class ReportFormController {
-    public TableView AppointmentInfoTable;
-    public TableColumn AppMonthCol;
-    public TableColumn AppTypeCol;
-    public TableColumn TotAppCol;
-    public TableColumn DivisionCol;
-    public TableColumn TotCustomerCol;
-    public ComboBox ContactCombo;
-    public TableView ReportTable;
-    public TableColumn IdCol;
-    public TableColumn TitleCol;
-    public TableColumn TypeCol;
-    public TableColumn DescriptionCol;
-    public TableColumn LocationCol;
-    public TableColumn StartCol;
-    public TableColumn EndCol;
-    public TableColumn CustomerIdCol;
+    public TableView<ReportMonth> AppointmentInfoTable;
+    public TableColumn<?,?> AppMonthCol;
+    public TableColumn<?,?> AppTypeCol;
+    public TableColumn<?,?> MonthTotalAppCol;
+    public ComboBox<String> ContactCombo;
+    public TableView<Appointment> ReportTable;
+    public TableColumn<?,?> IdCol;
+    public TableColumn<?,?> TitleCol;
+    public TableColumn<?,?> TypeCol;
+    public TableColumn<?,?> DescriptionCol;
+    public TableColumn<?,?> LocationCol;
+    public TableColumn<?,?> StartCol;
+    public TableColumn<?,?> EndCol;
+    public TableColumn<?,?> CustomerIdCol;
     public Button Back;
     public Button LogOut;
+
+
+
+    public TableView<ReportCountries> CountryAppointments;
+    public TableColumn<?,?> CountryTotalAppCol;
+    public TableColumn<?,?> CountryCol;
 
     public void backButton(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/MainForm.fxml"));
@@ -44,5 +60,74 @@ public class ReportFormController {
     public void logOutButton(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
+    }
+
+    public void initialize() throws SQLException {
+
+
+
+        IdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        TitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        DescriptionCol.setCellValueFactory(new PropertyValueFactory<>("descr"));
+        LocationCol.setCellValueFactory(new PropertyValueFactory<>("loc"));
+        TypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        StartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        EndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        CustomerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+
+
+        ObservableList<ReportMonth> allMonthReportList = ReportMonthDB.getAllMonths();
+        AppMonthCol.setCellValueFactory(new PropertyValueFactory<>("monthName"));
+        AppTypeCol.setCellValueFactory(new PropertyValueFactory<>("types"));
+        MonthTotalAppCol.setCellValueFactory(new PropertyValueFactory<>("appPerMonth"));
+
+        AppointmentInfoTable.setItems(allMonthReportList);
+
+
+        ObservableList<ReportCountries> allCountryReportList = ReportCountriesDB.getCountries();
+        CountryCol.setCellValueFactory(new PropertyValueFactory<>("countryName"));
+        CountryTotalAppCol.setCellValueFactory(new PropertyValueFactory<>("numOfAppPerCountry"));
+
+        CountryAppointments.setItems(allCountryReportList);
+
+
+
+        ObservableList<Contact> contactsObservableList = ContactDB.getAllContacts();
+        ObservableList<String> allContactsNames = FXCollections.observableArrayList();
+        contactsObservableList.forEach(contacts -> allContactsNames.add(contacts.getContactName()));
+        ContactCombo.setItems(allContactsNames);
+
+    }
+    @FXML
+    public void getAppointmentInfo() {
+        try {
+
+            int contactID = 0;
+
+            ObservableList<Appointment> getAllAppointmentData = AppointmentDB.getAllAppointments();
+            ObservableList<Appointment> appointmentInfo = FXCollections.observableArrayList();
+            ObservableList<Contact> getAllContacts = ContactDB.getAllContacts();
+
+            Appointment contactAppointmentInfo;
+
+            String contactName = ContactCombo.getSelectionModel().getSelectedItem();
+
+            for (Contact contact: getAllContacts) {
+                if (contactName.equals(contact.getContactName())) {
+                    contactID = contact.getContactId();
+                }
+            }
+
+            for (Appointment appointment: getAllAppointmentData) {
+                if (appointment.getContactId() == contactID) {
+                    contactAppointmentInfo = appointment;
+                    appointmentInfo.add(contactAppointmentInfo);
+                }
+            }
+            ReportTable.setItems(appointmentInfo);
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }
