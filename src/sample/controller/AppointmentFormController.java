@@ -16,8 +16,11 @@ import sample.DAO.JDBC;
 import sample.model.Appointment;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class AppointmentFormController{
     public TableView<Appointment> AppointmentTable;
@@ -78,6 +81,29 @@ public class AppointmentFormController{
 
 
     public void deleteButton(ActionEvent event) {
+        try {
+            Connection connection = JDBC.getConnection();
+            int selectedAppointment = AppointmentTable.getSelectionModel().getSelectedItem().getAppointmentId();
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete the selected appointment with appointment id: " +
+                    selectedAppointment);
+            Optional<ButtonType> confirm = alert.showAndWait();
+
+            if (confirm.isPresent() && confirm.get() == ButtonType.OK) {
+                String query = "DELETE FROM appointments WHERE Appointment_ID=?";
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setInt(1, selectedAppointment);
+                ps.execute();
+
+                ObservableList<Appointment> allAppointmentList = AppointmentDB.getAllAppointments();
+                AppointmentTable.setItems(allAppointmentList);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void backButton(ActionEvent event) throws IOException {
