@@ -63,7 +63,7 @@ public class Appointment {
     private String descr;
     private String type;
     private String loc;
-    public Appointment(int appointmentId, int customerId, int userId, int contactId, LocalDateTime end, LocalDateTime start, String title, String descr, String type, String loc,String contactName,String userName, String customerName) {
+    public Appointment(int appointmentId, int customerId, int userId, int contactId, LocalDateTime start, LocalDateTime end, String title, String descr, String type, String loc,String contactName,String userName, String customerName) {
         this.appointmentId = appointmentId;
         this.customerId = customerId;
         this.userId = userId;

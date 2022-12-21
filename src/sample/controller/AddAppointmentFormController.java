@@ -3,6 +3,7 @@ package sample.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -38,7 +39,7 @@ public class AddAppointmentFormController {
     public Label AppointmentSTLabel;
     public Label AppointmentETLabel;
     public DatePicker AppointmentStartDate;
-    
+
     public ComboBox<String> AppointmentStartTime;
     public ComboBox<String> AppointmentEndTime;
     public ComboBox<String> AppointmentContact;
@@ -48,6 +49,7 @@ public class AddAppointmentFormController {
     public Button Cancel;
     public Button Save;
     public TextField AppointmentType;
+
 
     public void addAppointmentId(ActionEvent event) {
     }
@@ -60,7 +62,6 @@ public class AddAppointmentFormController {
 
     public void addAppointmentStartDate(ActionEvent event) {
     }
-
 
 
     public void addAppointmentStartTime(ActionEvent event) {
@@ -88,7 +89,7 @@ public class AddAppointmentFormController {
         MainScreenReturn.setScene(scene);
         MainScreenReturn.show();
     }
-
+@FXML
     public void saveButton(ActionEvent event) {
         try {
 
@@ -116,7 +117,7 @@ public class AddAppointmentFormController {
                 String endDate = AppointmentEndDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 String endTime = AppointmentEndTime.getValue();
 
-                System.out.println("thisDate + thisStart " + appointmentStartDate + " " + appointmentStartTime + ":00");
+
                 String startUTC = convertTimeDateUTC(appointmentStartDate + " " + appointmentStartTime + ":00");
                 String endUTC = convertTimeDateUTC(endDate + " " + endTime + ":00");
 
@@ -129,52 +130,97 @@ public class AddAppointmentFormController {
                 ZonedDateTime zoneDtStart = ZonedDateTime.of(dateTimeStart, ZoneId.systemDefault());
                 ZonedDateTime zoneDtEnd = ZonedDateTime.of(dateTimeEnd, ZoneId.systemDefault());
 
-                ZonedDateTime convertStartEST = zoneDtStart.withZoneSameInstant(ZoneId.of("America/New_York"));
+                ZonedDateTime convertStartEST = zoneDtStart.withZoneSameInstant(ZoneId.of ("America/New_York"));
                 ZonedDateTime convertEndEST = zoneDtEnd.withZoneSameInstant(ZoneId.of("America/New_York"));
 
-                LocalTime startAppointmentTimeToCheck = convertStartEST.toLocalTime();
-                LocalTime endAppointmentTimeToCheck = convertEndEST.toLocalTime();
+                LocalTime startAppTimeChosen = convertStartEST.toLocalTime();
+                LocalTime endAppTimeChosen = convertEndEST.toLocalTime();
 
-                DayOfWeek startAppointmentDayToCheck = convertStartEST.toLocalDate().getDayOfWeek();
-                DayOfWeek endAppointmentDayToCheck = convertEndEST.toLocalDate().getDayOfWeek();
-
-                int startAppointmentDayToCheckInt = startAppointmentDayToCheck.getValue();
-                int endAppointmentDayToCheckInt = endAppointmentDayToCheck.getValue();
+                DayOfWeek startAppDaySelection = convertStartEST.toLocalDate().getDayOfWeek();
+                DayOfWeek endAppDaySelection = convertEndEST.toLocalDate().getDayOfWeek();
+                int startAppDaySelectionValue = startAppDaySelection.getValue();
+                int endAppDaySelectionValue = endAppDaySelection.getValue();
 
                 int workWeekStart = DayOfWeek.MONDAY.getValue();
                 int workWeekEnd = DayOfWeek.FRIDAY.getValue();
 
-                LocalTime estBusinessStart = LocalTime.of(8, 0, 0);
-                LocalTime estBusinessEnd = LocalTime.of(22, 0, 0);
+                LocalTime businessStart = LocalTime.of(8, 0, 0);
+                LocalTime businessEnd = LocalTime.of(22, 0, 0);
+
+
+
+                if (startAppDaySelectionValue < workWeekStart || startAppDaySelectionValue > workWeekEnd || endAppDaySelectionValue < workWeekStart || endAppDaySelectionValue > workWeekEnd) {
+                    appointmentValidations("Appointment outside of business week!");
+                    return;
+                }
+
+                if (dateTimeStart.isAfter(dateTimeEnd)) {
+                   appointmentValidations("Start time is after end time!");
+                    return;
+                }
+                if (dateTimeStart.isEqual(dateTimeEnd)) {
+                    appointmentValidations("Appointment cannot start and end at the same time!");
+                    return;
+                }
+
+
+
+
 
                 int appointmentId = Integer.parseInt(String.valueOf((int) (Math.random() * 100)));
+                for (Appointment appointment: getAllAppointments){
+                    LocalDateTime start = appointment.getStart();
+                    LocalDateTime end = appointment.getEnd();
+
+                    if ((Integer.parseInt(findCustomerID(AppointmentCustomer.getValue())) == appointment.getCustomerId()) && (appointmentId != appointment.getAppointmentId()) &&
+
+                            (dateTimeStart.isBefore(start)) && (dateTimeEnd.isAfter(end))) {
+                        appointmentValidations("There is an appointment overlap for this customer");
+                        return;
+                    }
+                    if ((Integer.parseInt(findCustomerID(AppointmentCustomer.getValue())) == appointment.getCustomerId()) && (appointmentId != appointment.getAppointmentId()) &&
+
+                            (dateTimeStart.isAfter(start)) && (dateTimeStart.isBefore(end))) {
+                        appointmentValidations("There is an appointment overlap: Start Time overlaps other appointment for this customer");
+                        return;
+                    }
+                    if ((Integer.parseInt(findCustomerID(AppointmentCustomer.getValue())) == appointment.getCustomerId()) && (appointmentId != appointment.getAppointmentId()) &&
+
+                            (dateTimeEnd.isAfter(start)) && (dateTimeEnd.isBefore(end))) {
+                        appointmentValidations("Appointment End time overlaps with other appointment");
+                        return;
+                    }
+                    if ((Integer.parseInt(findCustomerID(AppointmentCustomer.getValue())) == appointment.getCustomerId()) && (appointmentId != appointment.getAppointmentId()) &&
+
+                            (dateTimeStart.equals(start) || dateTimeStart.equals(end) ||
+                            dateTimeEnd.equals(start) || dateTimeEnd.equals(end))){
+                        appointmentValidations("Appointment overlaps with other appointment from customer");
+                        return;
+                    }
+
+                }
 
                 String insertStatement = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-                JDBC.makePreparedStatement(insertStatement,JDBC.getConnection() );
+                JDBC.makePreparedStatement(insertStatement, JDBC.getConnection());
                 PreparedStatement ps = JDBC.getPreparedStatement();
                 ps.setInt(1, appointmentId);
                 ps.setString(2, AppointmentTitleText.getText());
                 ps.setString(3, Description.getText());
                 ps.setString(4, AppointmentLocationText.getText());
                 ps.setString(5, AppointmentType.getText());
-                //ps.setTimestamp(6, Timestamp.valueOf(startLocalDateTimeToAdd));
-                ps.setTimestamp(6, Timestamp.valueOf(startUTC));
-                ps.setTimestamp(7, Timestamp.valueOf(endUTC));
-                //need to verify this is correct
+                ps.setTimestamp(6, Timestamp.valueOf(dateTimeStart));
+                ps.setTimestamp(7, Timestamp.valueOf(dateTimeEnd));
                 ps.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
                 ps.setString(9, "admin");
                 ps.setTimestamp(10, Timestamp.valueOf(LocalDateTime.now()));
                 ps.setInt(11, 1);
                 ps.setInt(12, Integer.parseInt(findCustomerID(AppointmentCustomer.getValue())));
-                ps.setInt(13, Integer.parseInt(findContactID(AppointmentContact.getValue())));
-                ps.setInt(14, Integer.parseInt(findUserID(AppointmentUser.getValue())));
+                ps.setInt(13, Integer.parseInt(findUserID(AppointmentUser.getValue())));
+                ps.setInt(14, Integer.parseInt(findContactID(AppointmentContact.getValue())));
 
 
                 ps.execute();
-
-
-
 
 
                 Parent root = FXMLLoader.load(getClass().getResource("/sample/view/AppointmentForm.fxml"));
@@ -185,7 +231,7 @@ public class AddAppointmentFormController {
 
             }
 
-        }catch (SQLException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -197,7 +243,7 @@ public class AddAppointmentFormController {
         ObservableList<Contact> contactsObservableList = ContactDB.getAllContacts();
         ObservableList<String> allContactsNames = FXCollections.observableArrayList();
         ObservableList<UserCredentials> userCredentialsObservableList = UserCredentials.getAllUsers();
-        ObservableList<String>  allUserNames = FXCollections.observableArrayList();
+        ObservableList<String> allUserNames = FXCollections.observableArrayList();
         ObservableList<Customer> customerObservableList = CustomerDB.getAllCustomers();
         ObservableList<String> allCustomerNames = FXCollections.observableArrayList();
 
@@ -206,7 +252,7 @@ public class AddAppointmentFormController {
 
         ObservableList<String> appointmentTimes = FXCollections.observableArrayList();
 
-        userCredentialsObservableList.forEach(users ->allUserNames.add(users.getUserName()));
+        userCredentialsObservableList.forEach(users -> allUserNames.add(users.getUserName()));
 
         customerObservableList.forEach(customer -> allCustomerNames.add(customer.getCustomerName()));
 
@@ -229,6 +275,7 @@ public class AddAppointmentFormController {
         System.out.println(allUserNames);
 
     }
+
     public static String convertTimeDateUTC(String dateTime) {
         Timestamp currentTimeStamp = Timestamp.valueOf(String.valueOf(dateTime));
         LocalDateTime LocalDT = currentTimeStamp.toLocalDateTime();
@@ -247,6 +294,7 @@ public class AddAppointmentFormController {
         }
         return contactID;
     }
+
     public static String findCustomerID(String customerID) throws SQLException {
         PreparedStatement ps = JDBC.getConnection().prepareStatement("SELECT * FROM customers WHERE Customer_Name = ?");
         ps.setString(1, customerID);
@@ -256,6 +304,7 @@ public class AddAppointmentFormController {
         }
         return customerID;
     }
+
     public static String findUserID(String userID) throws SQLException {
         PreparedStatement ps = JDBC.getConnection().prepareStatement("SELECT * FROM users WHERE User_Name = ?");
         ps.setString(1, userID);
@@ -266,4 +315,15 @@ public class AddAppointmentFormController {
         return userID;
     }
 
+    public  void appointmentValidations(String error) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, error);
+        alert.showAndWait();
+
+
+
+
+    }
 }
+
+
+

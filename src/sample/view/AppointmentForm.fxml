@@ -9,20 +9,20 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="579.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.AppointmentFormController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="579.0" prefWidth="954.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.AppointmentFormController">
    <children>
-      <TableView fx:id="AppointmentTable" layoutX="64.0" layoutY="104.0" prefHeight="372.0" prefWidth="817.0">
+      <TableView fx:id="AppointmentTable" layoutX="64.0" layoutY="104.0" prefHeight="372.0" prefWidth="824.0">
         <columns>
           <TableColumn fx:id="IdCol" prefWidth="53.0" text="ID" />
           <TableColumn fx:id="TitleCol" prefWidth="97.0" text="Title" />
             <TableColumn fx:id="TypeCol" prefWidth="75.0" text="Type" />
             <TableColumn fx:id="DescriptionCol" prefWidth="92.0" text="Description" />
             <TableColumn fx:id="LocationCol" prefWidth="59.0" text="Location" />
-            <TableColumn fx:id="StartCol" prefWidth="100.0" text="Start Date/Time" />
-            <TableColumn fx:id="EndCol" prefWidth="113.0" text="End Date/Time" />
+            <TableColumn fx:id="StartCol" prefWidth="104.0" text="Start Date/Time" />
+            <TableColumn fx:id="EndCol" prefWidth="109.0" text="End Date/Time" />
             <TableColumn fx:id="ContactCol" prefWidth="73.0" text="Contact" />
             <TableColumn fx:id="CustomerCol" prefWidth="92.0" text="Customer ID" />
-            <TableColumn fx:id="UserIdCol" prefWidth="62.0" text="User ID" />
+            <TableColumn fx:id="UserIdCol" prefWidth="69.0" text="User ID" />
         </columns>
       </TableView>
       <Label layoutX="64.0" layoutY="57.0" prefHeight="30.0" prefWidth="125.0" text="Appointments">

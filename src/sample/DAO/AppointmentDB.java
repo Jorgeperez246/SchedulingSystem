@@ -35,7 +35,7 @@ public class AppointmentDB {
             String contactName = rs.getString("Contact_Name");
             String userName = rs.getString("User_Name");
             String customerName = rs.getString("Customer_Name");
-            Appointment appointment = new Appointment(appointmentId, customerId, userId, contactId, end, start, title, descr, type, loc,contactName,userName,customerName);
+            Appointment appointment = new Appointment(appointmentId, customerId, userId, contactId, start, end, title, descr, type, loc,contactName,userName,customerName);
             appointmentsObservableList.add(appointment);
         }
 
