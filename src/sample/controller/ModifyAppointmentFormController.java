@@ -117,7 +117,7 @@ public class ModifyAppointmentFormController {
                 String endDate = AppointmentEndDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 String endTime = AppointmentEndTime.getValue();
 
-                System.out.println("thisDate + thisStart " + appointmentStartDate + " " + appointmentStartTime + ":00");
+
                 String startUTC = convertTimeDateUTC(appointmentStartDate + " " + appointmentStartTime + ":00");
                 String endUTC = convertTimeDateUTC(endDate + " " + endTime + ":00");
 
@@ -130,24 +130,75 @@ public class ModifyAppointmentFormController {
                 ZonedDateTime zoneDtStart = ZonedDateTime.of(dateTimeStart, ZoneId.systemDefault());
                 ZonedDateTime zoneDtEnd = ZonedDateTime.of(dateTimeEnd, ZoneId.systemDefault());
 
-                ZonedDateTime convertStartEST = zoneDtStart.withZoneSameInstant(ZoneId.of("America/New_York"));
+                ZonedDateTime convertStartEST = zoneDtStart.withZoneSameInstant(ZoneId.of ("America/New_York"));
                 ZonedDateTime convertEndEST = zoneDtEnd.withZoneSameInstant(ZoneId.of("America/New_York"));
 
-                LocalTime startAppointmentTimeToCheck = convertStartEST.toLocalTime();
-                LocalTime endAppointmentTimeToCheck = convertEndEST.toLocalTime();
+                LocalTime startAppTimeChosen = convertStartEST.toLocalTime();
+                LocalTime endAppTimeChosen = convertEndEST.toLocalTime();
 
-                DayOfWeek startAppointmentDayToCheck = convertStartEST.toLocalDate().getDayOfWeek();
-                DayOfWeek endAppointmentDayToCheck = convertEndEST.toLocalDate().getDayOfWeek();
-
-                int startAppointmentDayToCheckInt = startAppointmentDayToCheck.getValue();
-                int endAppointmentDayToCheckInt = endAppointmentDayToCheck.getValue();
+                DayOfWeek startAppDaySelection = convertStartEST.toLocalDate().getDayOfWeek();
+                DayOfWeek endAppDaySelection = convertEndEST.toLocalDate().getDayOfWeek();
+                int startAppDaySelectionValue = startAppDaySelection.getValue();
+                int endAppDaySelectionValue = endAppDaySelection.getValue();
 
                 int workWeekStart = DayOfWeek.MONDAY.getValue();
                 int workWeekEnd = DayOfWeek.FRIDAY.getValue();
 
-                LocalTime estBusinessStart = LocalTime.of(8, 0, 0);
-                LocalTime estBusinessEnd = LocalTime.of(22, 0, 0);
+                LocalTime businessStart = LocalTime.of(8, 0, 0);
+                LocalTime businessEnd = LocalTime.of(22, 0, 0);
 
+
+
+                if (startAppDaySelectionValue < workWeekStart || startAppDaySelectionValue > workWeekEnd || endAppDaySelectionValue < workWeekStart || endAppDaySelectionValue > workWeekEnd) {
+                    appointmentValidations("Appointment outside of business week!");
+                    return;
+                }
+
+                if (dateTimeStart.isAfter(dateTimeEnd)) {
+                    appointmentValidations("Start time is after end time!");
+                    return;
+                }
+                if (dateTimeStart.isEqual(dateTimeEnd)) {
+                    appointmentValidations("Appointment cannot start and end at the same time!");
+                    return;
+                }
+
+
+
+
+
+
+                for (Appointment appointment: getAllAppointments){
+                    LocalDateTime start = appointment.getStart();
+                    LocalDateTime end = appointment.getEnd();
+
+                    if ((Integer.parseInt(findCustomerID(AppointmentCustomer.getValue())) == appointment.getCustomerId()) && (Integer.parseInt(AppointmentIdText.getText()) != appointment.getAppointmentId()) &&
+
+                            (dateTimeStart.isBefore(start)) && (dateTimeEnd.isAfter(end))) {
+                        appointmentValidations("There is an appointment overlap for this customer");
+                        return;
+                    }
+                    if ((Integer.parseInt(findCustomerID(AppointmentCustomer.getValue())) == appointment.getCustomerId()) && (Integer.parseInt(AppointmentIdText.getText()) != appointment.getAppointmentId()) &&
+
+                            (dateTimeStart.isAfter(start)) && (dateTimeStart.isBefore(end))) {
+                        appointmentValidations("There is an appointment overlap: Start Time overlaps other appointment for this customer");
+                        return;
+                    }
+                    if ((Integer.parseInt(findCustomerID(AppointmentCustomer.getValue())) == appointment.getCustomerId()) && (Integer.parseInt(AppointmentIdText.getText()) != appointment.getAppointmentId()) &&
+
+                            (dateTimeEnd.isAfter(start)) && (dateTimeEnd.isBefore(end))) {
+                        appointmentValidations("Appointment End time overlaps with other appointment");
+                        return;
+                    }
+                    if ((Integer.parseInt(findCustomerID(AppointmentCustomer.getValue())) == appointment.getCustomerId()) && (Integer.parseInt(AppointmentIdText.getText()) != appointment.getAppointmentId()) &&
+
+                            (dateTimeStart.equals(start) || dateTimeStart.equals(end) ||
+                                    dateTimeEnd.equals(start) || dateTimeEnd.equals(end))){
+                        appointmentValidations("Appointment overlaps with other appointment from customer");
+                        return;
+                    }
+
+                }
 
 
                 String insertStatement = "UPDATE appointments SET Appointment_ID = ?, Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
@@ -283,6 +334,14 @@ public class ModifyAppointmentFormController {
             userID = rs.getString("User_ID");
         }
         return userID;
+    }
+    public  void appointmentValidations(String error) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, error);
+        alert.showAndWait();
+
+
+
+
     }
 
 }
