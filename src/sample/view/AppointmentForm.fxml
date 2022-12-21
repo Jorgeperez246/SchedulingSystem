@@ -30,12 +30,12 @@
             <Font size="19.0" />
          </font>
       </Label>
-      <RadioButton fx:id="allAppointments" layoutX="687.0" layoutY="64.0" mnemonicParsing="false" text="All">
+      <RadioButton fx:id="allAppointments" layoutX="687.0" layoutY="64.0" mnemonicParsing="false" onAction="#displayAllAppointments" selected="true" text="All">
          <toggleGroup>
             <ToggleGroup fx:id="appointmentToggle" />
          </toggleGroup></RadioButton>
-      <RadioButton fx:id="MonthAppointments" layoutX="753.0" layoutY="64.0" mnemonicParsing="false" text="Month" toggleGroup="$appointmentToggle" />
-      <RadioButton fx:id="WeekAppointments" layoutX="830.0" layoutY="64.0" mnemonicParsing="false" text="Week" toggleGroup="$appointmentToggle" />
+      <RadioButton fx:id="MonthAppointments" layoutX="753.0" layoutY="64.0" mnemonicParsing="false" onAction="#displayMonthAppointments" text="Month" toggleGroup="$appointmentToggle" />
+      <RadioButton fx:id="WeekAppointments" layoutX="830.0" layoutY="64.0" mnemonicParsing="false" onAction="#displayWeekAppointments" text="Week" toggleGroup="$appointmentToggle" />
       <Button fx:id="Add" layoutX="64.0" layoutY="518.0" mnemonicParsing="false" onAction="#addButton" text="Add" />
       <Button fx:id="Modify" layoutX="127.0" layoutY="518.0" mnemonicParsing="false" onAction="#modifyButton" text="Modify" />
       <Button fx:id="Delete" layoutX="208.0" layoutY="518.0" mnemonicParsing="false" onAction="#deleteButton" text="Delete" />

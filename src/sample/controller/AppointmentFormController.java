@@ -1,9 +1,10 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,12 +14,10 @@ import javafx.stage.Stage;
 import sample.DAO.AppointmentDB;
 import sample.DAO.JDBC;
 import sample.model.Appointment;
-import sample.model.Customer;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
+import java.time.LocalDateTime;
 
 public class AppointmentFormController{
     public TableView<Appointment> AppointmentTable;
@@ -106,7 +105,61 @@ public class AppointmentFormController{
 
         AppointmentTable.setItems(allAppointmentsList);
     }
+    @FXML
+    void displayAllAppointments(ActionEvent event) throws SQLException {
+        try {
+            ObservableList<Appointment> allAppointmentsList = AppointmentDB.getAllAppointments();
 
+            for (Appointment ignored : allAppointmentsList) {
+                AppointmentTable.setItems(allAppointmentsList);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    void displayMonthAppointments(ActionEvent event) throws SQLException {
+        try {
+            ObservableList<Appointment> allAppointmentsList = AppointmentDB.getAllAppointments();
+            ObservableList<Appointment> allAppointmentsForMonth = FXCollections.observableArrayList();
+
+            LocalDateTime startMonth = LocalDateTime.now().minusMonths(1);
+            LocalDateTime endMonth = LocalDateTime.now().plusMonths(1);
+
+
+            allAppointmentsList.forEach(appointment -> {
+                if (appointment.getEnd().isAfter(startMonth) && appointment.getEnd().isBefore(endMonth)) {
+                    allAppointmentsForMonth.add(appointment);
+                }
+                AppointmentTable.setItems(allAppointmentsForMonth);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void displayWeekAppointments(ActionEvent event) throws SQLException {
+        try {
+
+            ObservableList<Appointment> allAppointmentsList = AppointmentDB.getAllAppointments();
+            ObservableList<Appointment> allAppointmentsForWeek = FXCollections.observableArrayList();
+
+            LocalDateTime startWeek = LocalDateTime.now().minusWeeks(1);
+            LocalDateTime endWeek = LocalDateTime.now().plusWeeks(1);
+
+            allAppointmentsList.forEach(appointment -> {
+                if (appointment.getEnd().isAfter(startWeek) && appointment.getEnd().isBefore(endWeek)) {
+                    allAppointmentsForWeek.add(appointment);
+                }
+                AppointmentTable.setItems(allAppointmentsForWeek);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
 
