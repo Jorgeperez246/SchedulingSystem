@@ -211,8 +211,8 @@ public class ModifyAppointmentFormController {
                 ps.setString(4, AppointmentLocationText.getText());
                 ps.setString(5, AppointmentType.getText());
                 //ps.setTimestamp(6, Timestamp.valueOf(startLocalDateTimeToAdd));
-                ps.setTimestamp(6, Timestamp.valueOf(startUTC));
-                ps.setTimestamp(7, Timestamp.valueOf(endUTC));
+                ps.setTimestamp(6, Timestamp.valueOf(dateTimeStart));
+                ps.setTimestamp(7, Timestamp.valueOf(dateTimeEnd));
                 //need to verify this is correct
                 ps.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
                 ps.setString(9, "admin");
