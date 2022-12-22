@@ -11,8 +11,13 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class AppointmentDB {
+    /**
+     * Lists all appointments within the database
+     * @return appointmentsList
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getAllAppointments() throws SQLException {
-        ObservableList<Appointment> appointmentsObservableList = FXCollections.observableArrayList();
+        ObservableList<Appointment> appointmentsList = FXCollections.observableArrayList();
         String sql = "SELECT appointments.*, customers.Customer_Name, users.User_Name, contacts.Contact_Name\n" +
                 "FROM appointments\n" +
                 "INNER JOIN customers ON appointments.Customer_ID = customers.Customer_ID\n" +
@@ -36,10 +41,10 @@ public class AppointmentDB {
             String userName = rs.getString("User_Name");
             String customerName = rs.getString("Customer_Name");
             Appointment appointment = new Appointment(appointmentId, customerId, userId, contactId, start, end, title, descr, type, loc,contactName,userName,customerName);
-            appointmentsObservableList.add(appointment);
+            appointmentsList.add(appointment);
         }
 
-        return appointmentsObservableList;
+        return appointmentsList;
     }
 
 }

@@ -9,9 +9,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ContactDB {
-
+    /**
+     * Lists all contacts within the database
+     * @return contactsList
+     * @throws SQLException
+     */
     public static ObservableList<Contact> getAllContacts() throws SQLException {
-        ObservableList<Contact> contactsObservableList = FXCollections.observableArrayList();
+        ObservableList<Contact> contactsList = FXCollections.observableArrayList();
         String sql = "SELECT * from contacts";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -20,8 +24,8 @@ public class ContactDB {
             String contactName = rs.getString("Contact_Name");
             String contactEmail = rs.getString("Email");
             Contact contact = new Contact(contactName, contactEmail, contactID);
-            contactsObservableList.add(contact);
+            contactsList.add(contact);
         }
-        return contactsObservableList;
+        return contactsList;
     }
 }

@@ -10,9 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CustomerDB {
-
+    /**
+     * lists customer data along with data on first_level_division
+     * @return customersList
+     * @throws SQLException
+     */
     public static ObservableList<Customer> getAllCustomers() throws SQLException {
-        ObservableList<Customer> customersObservableList = FXCollections.observableArrayList();
+        ObservableList<Customer> customersList = FXCollections.observableArrayList();
         String sql = "SELECT customers.*, first_level_divisions.Division, countries.Country\n" +
                 "FROM customers\n" +
                 "INNER JOIN first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID\n" +
@@ -33,9 +37,9 @@ public class CustomerDB {
 
 
             Customer customer = new Customer(divisionName, customerPhone, customerAdd, customerId, customerName, customerPost, countryName);
-            customersObservableList.add(customer);
+            customersList.add(customer);
         }
 
-        return customersObservableList;
+        return customersList;
     }
 }

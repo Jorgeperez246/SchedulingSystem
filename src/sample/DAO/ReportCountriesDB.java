@@ -15,9 +15,13 @@ public class ReportCountriesDB extends Appointment {
         super(appointmentId, customerId, userId, contactId, end, start, title, descr, type, loc, contactName, userName, customerName);
     }
 
-
+    /**
+     * Lists countries along with amount of customers
+     * @return countriesList
+     * @throws SQLException
+     */
     public static ObservableList<ReportCountries> getCountries() throws SQLException {
-        ObservableList<ReportCountries> countriesObservableList = FXCollections.observableArrayList();
+        ObservableList<ReportCountries> countriesList = FXCollections.observableArrayList();
         String sql = "select countries.Country, count(*) as countryCount from customers inner join first_level_divisions on customers.Division_ID = first_level_divisions.Division_ID inner join countries on countries.Country_ID = first_level_divisions.Country_ID where  customers.Division_ID = first_level_divisions.Division_ID group by first_level_divisions.Country_ID";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -26,9 +30,9 @@ public class ReportCountriesDB extends Appointment {
             String countryName = rs.getString("Country");
             int numOfAppPerCountry = rs.getInt("countryCount");
             ReportCountries report = new ReportCountries(numOfAppPerCountry, countryName);
-            countriesObservableList.add(report);
+            countriesList.add(report);
         }
 
-        return countriesObservableList;
+        return countriesList;
     }
 }

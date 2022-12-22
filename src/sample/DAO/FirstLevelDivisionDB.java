@@ -13,19 +13,24 @@ public class FirstLevelDivisionDB extends FirstLevelDivision {
         super(divisionName,divisionID, country_ID);
     }
 
-
+    /**
+     * Lists first_level_division data
+     * @return firstLevelDivisionsList
+     * @throws SQLException
+     */
     public static ObservableList<FirstLevelDivisionDB> getAllFirstLevelDivisions() throws SQLException {
-        ObservableList<FirstLevelDivisionDB> firstLevelDivisionsObservableList = FXCollections.observableArrayList();
+        ObservableList<FirstLevelDivisionDB> firstLevelDivisionsList = FXCollections.observableArrayList();
         String sql = "SELECT * from first_level_divisions";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             int divisionID = rs.getInt("Division_ID");
-            String divisionName = rs.getString("Division");
             int country_ID = rs.getInt("COUNTRY_ID");
+            String divisionName = rs.getString("Division");
+
             FirstLevelDivisionDB firstLevelDivision = new FirstLevelDivisionDB( divisionName,divisionID, country_ID);
-            firstLevelDivisionsObservableList.add(firstLevelDivision);
+            firstLevelDivisionsList.add(firstLevelDivision);
         }
-        return firstLevelDivisionsObservableList;
+        return firstLevelDivisionsList;
     }
 }

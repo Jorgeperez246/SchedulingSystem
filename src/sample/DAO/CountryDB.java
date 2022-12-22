@@ -13,8 +13,13 @@ public class CountryDB extends Country {
         super(countryName, countryId);
     }
 
+    /**
+     * Lists all countries along with the associated ID within database.
+     * @return countriesList
+     * @throws SQLException
+     */
     public static ObservableList<CountryDB> getCountries() throws SQLException {
-        ObservableList<CountryDB> countriesObservableList = FXCollections.observableArrayList();
+        ObservableList<CountryDB> countriesList = FXCollections.observableArrayList();
         String sql = "SELECT Country_ID, Country from countries";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -22,8 +27,8 @@ public class CountryDB extends Country {
             int countryId = rs.getInt("Country_ID");
             String countryName = rs.getString("Country");
             CountryDB country = new CountryDB(countryName, countryId);
-            countriesObservableList.add(country);
+            countriesList.add(country);
         }
-        return countriesObservableList;
+        return countriesList;
     }
 }

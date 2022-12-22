@@ -16,7 +16,10 @@ public class JDBC {
         private static Connection connection = null;  // Connection Interface
         private static PreparedStatement preparedStatement;
 
-         public static void makeConnection() {
+    /**
+     * Makes connection to the database
+     */
+    public static void makeConnection() {
 
           try {
               Class.forName(driver); // Locate Driver
@@ -32,10 +35,18 @@ public class JDBC {
                   }
           }
 
-            public static Connection getConnection() {
+    /**
+     *
+     * @return connection
+     */
+    public static Connection getConnection() {
                 return connection;
             }
-             public static void closeConnection() {
+
+    /**
+     * closes the connection
+     */
+    public static void closeConnection() {
                  try {
                      connection.close();
                      System.out.println("Connection closed!");

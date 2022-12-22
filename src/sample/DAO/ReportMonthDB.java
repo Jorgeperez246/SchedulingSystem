@@ -10,8 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ReportMonthDB {
+    /**
+     * Lists Month name along with type and number of appointments
+     * @return reportMonthList
+     * @throws SQLException
+     */
     public static ObservableList<ReportMonth> getAllMonths() throws SQLException {
-        ObservableList<ReportMonth> reportMonthObservableList = FXCollections.observableArrayList();
+        ObservableList<ReportMonth> reportMonthList = FXCollections.observableArrayList();
         String sql = "SELECT MONTHNAME(Start) AS month_name,\n" +
                 "\t   REPLACE(GROUP_CONCAT(appointments.Type), ',', '\\n') AS types,\n" +
                 "       COUNT(*) AS total_appointments\n" +
@@ -26,9 +31,9 @@ public class ReportMonthDB {
             String monthName = rs.getString("month_name");
             String types = rs.getString("types");
             ReportMonth reportMonth = new ReportMonth(monthName, types, appPerMonth);
-            reportMonthObservableList.add(reportMonth);
+            reportMonthList.add(reportMonth);
         }
-        return reportMonthObservableList;
+        return reportMonthList;
     }
 }
 

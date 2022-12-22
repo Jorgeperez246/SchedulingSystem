@@ -11,7 +11,16 @@ public class Customer {
     private String countryName;
 
 
-
+    /**
+     *
+     * @param divisionName
+     * @param customerPhone
+     * @param customerAddress
+     * @param customerId
+     * @param customerName
+     * @param customerPost
+     * @param countryName
+     */
     public Customer(String divisionName, String customerPhone, String customerAddress, int customerId, String customerName, String customerPost, String countryName) {
         this.divisionName = divisionName;
         this.customerPhone = customerPhone;
@@ -25,31 +34,58 @@ public class Customer {
     }
 
 
-
-
+    /**
+     *
+     * @return divisionName
+     */
     public String getDivisionName() {
         return divisionName;
     }
 
+    /**
+     *
+     * @return customerPhone
+     */
     public String getCustomerPhone() {
         return customerPhone;
     }
 
+    /**
+     *
+     * @return customerAddress
+     */
     public String getCustomerAddress() {
         return customerAddress;
     }
 
+    /**
+     *
+     * @return customerId
+     */
     public int getCustomerId() {
         return customerId;
     }
 
+    /**
+     *
+     * @return customerName
+     */
     public String getCustomerName() {
         return customerName;
     }
 
+    /**
+     *
+     * @return customerPost
+     */
     public String getCustomerPost() {
         return customerPost;
     }
+
+    /**
+     *
+     * @return countryName
+     */
     public String getCountryName() {
         return countryName;
     }

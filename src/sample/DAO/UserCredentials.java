@@ -14,6 +14,12 @@ public class UserCredentials extends User {
         super(userID,userName,userPassword);
     }
 
+    /**
+     * validates user entered in login form
+     * @param Username
+     * @param Password
+     * @return
+     */
     public static int userValidation(String Username, String Password) {
         try
         {
@@ -38,8 +44,13 @@ public class UserCredentials extends User {
         return -1;
     }
 
+    /**
+     * lists all users in database
+     * @return usersList
+     * @throws SQLException
+     */
     public static ObservableList<UserCredentials> getAllUsers() throws SQLException {
-        ObservableList<UserCredentials> usersObservableList = FXCollections.observableArrayList();
+        ObservableList<UserCredentials> usersList = FXCollections.observableArrayList();
         String sql = "SELECT * from users";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -48,9 +59,9 @@ public class UserCredentials extends User {
             String userName = rs.getString("User_Name");
             String userPassword = rs.getString("Password");
             UserCredentials user = new UserCredentials(userID, userName, userPassword);
-            usersObservableList.add(user);
+            usersList.add(user);
         }
-        return usersObservableList;
+        return usersList;
     }
 }
 
