@@ -49,38 +49,7 @@ public class ModifyAppointmentFormController {
     public Button Cancel;
     public Button Save;
 
-    public void appointmentIdHandler(ActionEvent event) {
-    }
 
-    public void appointmentTitleHandler(ActionEvent event) {
-    }
-
-    public void appointmentLocationHandler(ActionEvent event) {
-    }
-
-    public void addAppointmentStartDate(ActionEvent event) {
-    }
-
-    public void addAppointmentType(ActionEvent event) {
-    }
-
-    public void addAppointmentStartTime(ActionEvent event) {
-    }
-
-    public void addAppointmentEndTime(ActionEvent event) {
-    }
-
-    public void addAppointmentContact(ActionEvent event) {
-    }
-
-    public void addAppointmentCustomer(ActionEvent event) {
-    }
-
-    public void addAppointmentUser(ActionEvent event) {
-    }
-
-    public void addAppointmentEndDate(ActionEvent event) {
-    }
 
     public void cancelButton(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/AppointmentForm.fxml"));

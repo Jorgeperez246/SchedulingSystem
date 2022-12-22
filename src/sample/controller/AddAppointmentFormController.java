@@ -51,36 +51,7 @@ public class AddAppointmentFormController {
     public TextField AppointmentType;
 
 
-    public void addAppointmentId(ActionEvent event) {
-    }
 
-    public void addAppointmentTitle(ActionEvent event) {
-    }
-
-    public void addAppointmentLocation(ActionEvent event) {
-    }
-
-    public void addAppointmentStartDate(ActionEvent event) {
-    }
-
-
-    public void addAppointmentStartTime(ActionEvent event) {
-    }
-
-    public void addAppointmentEndTime(ActionEvent event) {
-    }
-
-    public void addAppointmentContact(ActionEvent event) {
-    }
-
-    public void addAppointmentCustomer(ActionEvent event) {
-    }
-
-    public void addAppointmentUser(ActionEvent event) {
-    }
-
-    public void addAppointmentEndDate(ActionEvent event) {
-    }
 
     public void cancelButton(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/AppointmentForm.fxml"));

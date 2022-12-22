@@ -14,7 +14,7 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <TextField fx:id="CustomerId" layoutX="274.0" layoutY="137.0" />
+      <TextField fx:id="CustomerId" disable="true" layoutX="274.0" layoutY="137.0" promptText="auto-generated" />
       <TextField fx:id="CustomerName" layoutX="274.0" layoutY="184.0" />
       <TextField fx:id="CustomerAddress" layoutX="274.0" layoutY="247.0" />
       <Label layoutX="55.0" layoutY="137.0" prefHeight="25.0" prefWidth="98.0" text="ID">
