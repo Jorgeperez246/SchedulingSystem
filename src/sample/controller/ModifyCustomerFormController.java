@@ -39,7 +39,11 @@ public class ModifyCustomerFormController {
     public ComboBox<String> Country;
     public ComboBox<String> State;
 
-
+    /**
+     * takes you back to CustomerForm
+     * @param event
+     * @throws IOException
+     */
     public void cancelButton(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/CustomerForm.fxml"));
         Scene scene = new Scene(root);
@@ -48,9 +52,13 @@ public class ModifyCustomerFormController {
         MainScreenReturn.show();
     }
 
+    /**
+     * updates customer in database by customer ID on click
+     * @param event
+     */
     public void saveButton(ActionEvent event) {
         try {
-            Connection connection = JDBC.getConnection();
+
 
 
             if (!CustomerName.getText().isEmpty() || !CustomerAddress.getText().isEmpty() || !PostalCode.getText().isEmpty() || !PhoneNumber.getText().isEmpty() || !Country.getValue().isEmpty() || !State.getValue().isEmpty())
@@ -99,6 +107,11 @@ public class ModifyCustomerFormController {
         }
     }
 
+    /**
+     * sends customer data from customer selection in CustomerForm to ModifyCustomerForm
+     * @param selectedIndex
+     * @param selectedCustomer
+     */
     public void sendCustomerToModify(int selectedIndex, Customer selectedCustomer){
 
         index = selectedIndex;
@@ -116,6 +129,10 @@ public class ModifyCustomerFormController {
 
     }
 
+    /**
+     * prefills combo boxes with lambda function
+     * @throws SQLException
+     */
     public void initialize() throws SQLException {
         String selectedCountry = Country.getSelectionModel().getSelectedItem();
 
@@ -127,9 +144,9 @@ public class ModifyCustomerFormController {
         ObservableList<FirstLevelDivisionDB> firstLevelDivisionObservableList = FirstLevelDivisionDB.getAllFirstLevelDivisions();
         ObservableList<String> allFirstLevelDivisionNames = FXCollections.observableArrayList();
 
-        //lambda function to add countries to dropdown
+        //lambda here
         countriesObservableList.forEach(countries ->allCountryNames.add(countries.getCountryName()) );
-
+        //lambda here
         firstLevelDivisionObservableList.forEach(firstLevelDivisionDB -> allFirstLevelDivisionNames.add(firstLevelDivisionDB.getDivisionName()));
 
         Country.setItems(allCountryNames);

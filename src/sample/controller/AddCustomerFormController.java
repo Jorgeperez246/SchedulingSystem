@@ -23,6 +23,9 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
+/**
+ * allows you to add a customer to database
+ */
 public class AddCustomerFormController {
     private final ObservableList<Country> countries = FXCollections.observableArrayList();
 
@@ -37,6 +40,11 @@ public class AddCustomerFormController {
     public ComboBox<String> Country;
     public ComboBox<String> State;
 
+    /**
+     * takes you back to CustomerForm
+     * @param event
+     * @throws IOException
+     */
     public void cancelButton(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/CustomerForm.fxml"));
         Scene scene = new Scene(root);
@@ -45,9 +53,13 @@ public class AddCustomerFormController {
         MainScreenReturn.show();
     }
 
+    /**
+     * adds customer data to database
+     * @param event
+     */
     public void saveButton(ActionEvent event) {
         try {
-            Connection connection = JDBC.getConnection();
+
 
             if (!CustomerName.getText().isEmpty() || !CustomerAddress.getText().isEmpty() || !PostalCode.getText().isEmpty() || !PhoneNumber.getText().isEmpty() || !Country.getValue().isEmpty() || !State.getValue().isEmpty())
             {
@@ -99,7 +111,10 @@ public class AddCustomerFormController {
 
     }
 
-
+    /**
+     * prefills combo boxes with Lambda functions
+     * @throws SQLException
+     */
     public void initialize() throws SQLException{
         ObservableList<CountryDB> countriesObservableList = CountryDB.getCountries();
         ObservableList<String> allCountryNames = FXCollections.observableArrayList();
@@ -107,7 +122,7 @@ public class AddCustomerFormController {
         ObservableList<FirstLevelDivisionDB> firstLevelDivisionObservableList = FirstLevelDivisionDB.getAllFirstLevelDivisions();
         ObservableList<String> allFirstLevelDivisionNames = FXCollections.observableArrayList();
 
-        //lambda function to add countries to dropdown
+        //lambda here
         countriesObservableList.forEach(countries ->allCountryNames.add(countries.getCountryName()) );
 
         firstLevelDivisionObservableList.forEach(firstLevelDivisionDB -> allFirstLevelDivisionNames.add(firstLevelDivisionDB.getDivisionName()));

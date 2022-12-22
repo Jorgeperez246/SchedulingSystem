@@ -20,6 +20,9 @@ import java.sql.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * modifies existing appointment as long as it passes validation checks
+ */
 public class ModifyAppointmentFormController {
     private int index = 0;
     public Label AppointmentIdLabel;
@@ -50,7 +53,11 @@ public class ModifyAppointmentFormController {
     public Button Save;
 
 
-
+    /**
+     * returns you to AppointmentForm
+     * @param event
+     * @throws IOException
+     */
     public void cancelButton(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/AppointmentForm.fxml"));
         Scene scene = new Scene(root);
@@ -59,10 +66,15 @@ public class ModifyAppointmentFormController {
         MainScreenReturn.show();
     }
 
+    /**
+     * saves modified appointment to database
+     * multiple validations put in place
+     * @param event
+     */
     public void saveButton(ActionEvent event) {
         try {
 
-            Connection connection = JDBC.getConnection();
+
 
             if (!AppointmentTitleText.getText().isEmpty() && !Description.getText().isEmpty() && !AppointmentLocationText.getText().isEmpty() && !AppointmentType.getText().isEmpty() && AppointmentStartDate.getValue() != null && AppointmentEndDate.getValue() != null && !AppointmentStartTime.getValue().isEmpty() && !AppointmentEndTime.getValue().isEmpty() && !AppointmentCustomer.getValue().isEmpty()) {
 
@@ -87,23 +99,23 @@ public class ModifyAppointmentFormController {
                 String endTime = AppointmentEndTime.getValue();
 
 
-                String startUTC = convertTimeDateUTC(appointmentStartDate + " " + appointmentStartTime + ":00");
-                String endUTC = convertTimeDateUTC(endDate + " " + endTime + ":00");
+                String startUTC = convertUTC(appointmentStartDate + " " + appointmentStartTime + ":00");
+                String endUTC = convertUTC(endDate + " " + endTime + ":00");
 
                 LocalTime localTimeStart = LocalTime.parse(AppointmentStartTime.getValue(), minHourFormat);
                 LocalTime LocalTimeEnd = LocalTime.parse(AppointmentEndTime.getValue(), minHourFormat);
-
                 LocalDateTime dateTimeStart = LocalDateTime.of(localDateStart, localTimeStart);
                 LocalDateTime dateTimeEnd = LocalDateTime.of(localDateEnd, LocalTimeEnd);
 
                 ZonedDateTime zoneDtStart = ZonedDateTime.of(dateTimeStart, ZoneId.systemDefault());
                 ZonedDateTime zoneDtEnd = ZonedDateTime.of(dateTimeEnd, ZoneId.systemDefault());
-
                 ZonedDateTime convertStartEST = zoneDtStart.withZoneSameInstant(ZoneId.of ("America/New_York"));
                 ZonedDateTime convertEndEST = zoneDtEnd.withZoneSameInstant(ZoneId.of("America/New_York"));
 
                 LocalTime startAppTimeChosen = convertStartEST.toLocalTime();
                 LocalTime endAppTimeChosen = convertEndEST.toLocalTime();
+                LocalTime businessStart = LocalTime.of(8, 0, 0);
+                LocalTime businessEnd = LocalTime.of(22, 0, 0);
 
                 DayOfWeek startAppDaySelection = convertStartEST.toLocalDate().getDayOfWeek();
                 DayOfWeek endAppDaySelection = convertEndEST.toLocalDate().getDayOfWeek();
@@ -113,20 +125,19 @@ public class ModifyAppointmentFormController {
                 int workWeekStart = DayOfWeek.MONDAY.getValue();
                 int workWeekEnd = DayOfWeek.FRIDAY.getValue();
 
-                LocalTime businessStart = LocalTime.of(8, 0, 0);
-                LocalTime businessEnd = LocalTime.of(22, 0, 0);
 
 
-
+                //makes sure appointment is not outside of business week
                 if (startAppDaySelectionValue < workWeekStart || startAppDaySelectionValue > workWeekEnd || endAppDaySelectionValue < workWeekStart || endAppDaySelectionValue > workWeekEnd) {
                     appointmentValidations("Appointment outside of business week!");
                     return;
                 }
-
+                //makes sure start time is not after end time
                 if (dateTimeStart.isAfter(dateTimeEnd)) {
                     appointmentValidations("Start time is after end time!");
                     return;
                 }
+                //makes sure start time is not equal to end time
                 if (dateTimeStart.isEqual(dateTimeEnd)) {
                     appointmentValidations("Appointment cannot start and end at the same time!");
                     return;
@@ -169,7 +180,7 @@ public class ModifyAppointmentFormController {
 
                 }
 
-
+                //updates existing appointment by using current appointment ID and new data
                 String insertStatement = "UPDATE appointments SET Appointment_ID = ?, Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
 
                 JDBC.makePreparedStatement(insertStatement,JDBC.getConnection() );
@@ -207,6 +218,12 @@ public class ModifyAppointmentFormController {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * prefills form with existing appointment data
+     * Lambda function used 3 times here for combo boxes
+     * @throws SQLException
+     */
     public void initialize() throws SQLException {
 
         ObservableList<Contact> contactsObservableList = ContactDB.getAllContacts();
@@ -216,13 +233,13 @@ public class ModifyAppointmentFormController {
         ObservableList<Customer> customerObservableList = CustomerDB.getAllCustomers();
         ObservableList<String> allCustomerNames = FXCollections.observableArrayList();
 
-
+        //lambda here
         contactsObservableList.forEach(contacts -> allContactsNames.add(contacts.getContactName()));
 
         ObservableList<String> appointmentTimes = FXCollections.observableArrayList();
-
+        //lambda here
         userCredentialsObservableList.forEach(users ->allUserNames.add(users.getUserName()));
-
+        //lambda here
         customerObservableList.forEach(customer -> allCustomerNames.add(customer.getCustomerName()));
 
         LocalTime firstAppointment = LocalTime.MIN.plusHours(8);
@@ -245,6 +262,11 @@ public class ModifyAppointmentFormController {
 
     }
 
+    /**
+     * function to send selected data from AppointmentForm to ModifyAppointmentForm
+     * @param selectedIndex
+     * @param selectedAppointment
+     */
     public void sendAppointmentToModify(int selectedIndex, Appointment selectedAppointment){
 
 
@@ -268,7 +290,13 @@ public class ModifyAppointmentFormController {
 
 
     }
-    public static String convertTimeDateUTC(String dateTime) {
+
+    /**
+     * converts date and time to UTC
+     * @param dateTime
+     * @return
+     */
+    public static String convertUTC(String dateTime) {
         Timestamp currentTimeStamp = Timestamp.valueOf(String.valueOf(dateTime));
         LocalDateTime LocalDT = currentTimeStamp.toLocalDateTime();
         ZonedDateTime zoneDT = LocalDT.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
@@ -277,6 +305,12 @@ public class ModifyAppointmentFormController {
         return localOUT.format(DateTimeFormatter.ofPattern("yyy-MM-dd HH:mm:ss"));
     }
 
+    /**
+     * finds contactId from name
+     * @param contactID
+     * @return
+     * @throws SQLException
+     */
     public static String findContactID(String contactID) throws SQLException {
         PreparedStatement ps = JDBC.getConnection().prepareStatement("SELECT * FROM contacts WHERE Contact_Name = ?");
         ps.setString(1, contactID);
@@ -286,6 +320,13 @@ public class ModifyAppointmentFormController {
         }
         return contactID;
     }
+
+    /**
+     * finds customer Id from name
+     * @param customerID
+     * @return
+     * @throws SQLException
+     */
     public static String findCustomerID(String customerID) throws SQLException {
         PreparedStatement ps = JDBC.getConnection().prepareStatement("SELECT * FROM customers WHERE Customer_Name = ?");
         ps.setString(1, customerID);
@@ -295,6 +336,13 @@ public class ModifyAppointmentFormController {
         }
         return customerID;
     }
+
+    /**
+     * finds userId from name
+     * @param userID
+     * @return
+     * @throws SQLException
+     */
     public static String findUserID(String userID) throws SQLException {
         PreparedStatement ps = JDBC.getConnection().prepareStatement("SELECT * FROM users WHERE User_Name = ?");
         ps.setString(1, userID);
@@ -304,6 +352,11 @@ public class ModifyAppointmentFormController {
         }
         return userID;
     }
+
+    /**
+     * confirmation popup reusable
+     * @param error
+     */
     public  void appointmentValidations(String error) {
         Alert alert = new Alert(Alert.AlertType.ERROR, error);
         alert.showAndWait();

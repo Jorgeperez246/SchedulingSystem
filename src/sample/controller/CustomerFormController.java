@@ -24,6 +24,9 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Customer class displays all relevant customer data
+ */
 public class CustomerFormController {
     private int index = 0;
     public TableView<Customer> CustomerTable;
@@ -38,6 +41,11 @@ public class CustomerFormController {
     public Button Delete;
     public Button Back;
 
+    /**
+     * button takes you to the AddCustomerForm
+     * @param event
+     * @throws IOException
+     */
     public void addButton(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/AddCustomerForm.fxml"));
         Scene scene = new Scene(root);
@@ -46,6 +54,11 @@ public class CustomerFormController {
         MainScreenReturn.show();
     }
 
+    /**
+     * button takes you to the modifyCustomerForm
+     * as long as a selection on CustomerTable is made
+     * @param event
+     */
     public void modifyButton(ActionEvent event) {
         try {
             JDBC.makeConnection();
@@ -72,7 +85,12 @@ public class CustomerFormController {
         }
     }
 
-
+    /**
+     * button deletes customer, if there are any existing appointments for customer
+     * it asks if you would like to delete all appointments
+     * @param event
+     * @throws SQLException
+     */
     public void deleteButton(ActionEvent event) throws SQLException {
 
         ObservableList<Appointment> getAllAppointmentsList = AppointmentDB.getAllAppointments();
@@ -102,7 +120,11 @@ public class CustomerFormController {
         }
     }
 
-
+    /**
+     * button takes you back to the MainForm
+     * @param event
+     * @throws IOException
+     */
     public void backButton(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/MainForm.fxml"));
         Scene scene = new Scene(root);
@@ -111,7 +133,11 @@ public class CustomerFormController {
         MainScreenReturn.show();
     }
 
-
+    /**
+     * customer data loaded from database here and
+     * displayed on CustomerTable
+     * @throws SQLException
+     */
     public void initialize() throws SQLException {
         Connection connection = JDBC.getConnection();
 

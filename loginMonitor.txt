@@ -240,3 +240,6 @@ user: test successfully logged in at: 2022-12-21 20:13:38.782771
 user: test successfully logged in at: 2022-12-21 20:14:13.6218593
 user: test successfully logged in at: 2022-12-21 20:19:25.347951
 user: test successfully logged in at: 2022-12-21 20:41:54.8979732
+user: asdf failed login attempt at: 2022-12-21 22:29:22.8853936
+user: test successfully logged in at: 2022-12-21 22:29:29.0883951
+user: test successfully logged in at: 2022-12-21 23:00:10.5488599

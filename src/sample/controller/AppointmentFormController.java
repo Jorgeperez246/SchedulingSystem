@@ -22,6 +22,9 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+/**
+ * displays all appointment information
+ */
 public class AppointmentFormController{
     public TableView<Appointment> AppointmentTable;
     public TableColumn<?,?> IdCol;
@@ -44,6 +47,11 @@ public class AppointmentFormController{
 
     public Button Back;
 
+    /**
+     * takes you to AddAppointmentForm
+     * @param event
+     * @throws IOException
+     */
     public void addButton(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/AddAppointmentForm.fxml"));
         Scene scene = new Scene(root);
@@ -53,6 +61,10 @@ public class AppointmentFormController{
 
     }
 
+    /**
+     * allows you to modify existing appointment, takes you to modifyAppointmentForm
+     * @param event
+     */
     public void modifyButton(ActionEvent event) {
         try {
             JDBC.makeConnection();
@@ -79,7 +91,10 @@ public class AppointmentFormController{
         }
     }
 
-
+    /**
+     * allows you to delete a selected appointment
+     * @param event
+     */
     public void deleteButton(ActionEvent event) {
         try {
             Connection connection = JDBC.getConnection();
@@ -106,6 +121,11 @@ public class AppointmentFormController{
 
     }
 
+    /**
+     * returns you to the MainForm
+     * @param event
+     * @throws IOException
+     */
     public void backButton(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/MainForm.fxml"));
         Scene scene = new Scene(root);
@@ -114,7 +134,10 @@ public class AppointmentFormController{
         MainScreenReturn.show();
     }
 
-
+    /**
+     * prefills appointment data to AppointmentTable from database
+     * @throws SQLException
+     */
     public void initialize() throws SQLException {
         ObservableList<Appointment> allAppointmentsList = AppointmentDB.getAllAppointments();
 
@@ -131,6 +154,12 @@ public class AppointmentFormController{
 
         AppointmentTable.setItems(allAppointmentsList);
     }
+
+    /**
+     * displays all appointments when 'all' radio button is selected
+     * @param event
+     * @throws SQLException
+     */
     @FXML
     void displayAllAppointments(ActionEvent event) throws SQLException {
         try {
@@ -144,7 +173,11 @@ public class AppointmentFormController{
         }
     }
 
-
+    /**
+     * displays appointments that fall within a month of current appointment when 'month' radio button is selected
+     * @param event
+     * @throws SQLException
+     */
     @FXML
     void displayMonthAppointments(ActionEvent event) throws SQLException {
         try {
@@ -166,6 +199,11 @@ public class AppointmentFormController{
         }
     }
 
+    /**
+     * displays appointments that fall within a week of current appointment when 'week' radio button is selected
+     * @param event
+     * @throws SQLException
+     */
     @FXML
     void displayWeekAppointments(ActionEvent event) throws SQLException {
         try {

@@ -26,7 +26,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
-
+/**
+ * LoginFormController validates user as well as displays upcoming appointments
+ * upon successful login
+ */
 public class LoginFormController implements Initializable {
 
 
@@ -43,8 +46,12 @@ public class LoginFormController implements Initializable {
     private Button Login;
 
 
-
-
+    /**
+     * Login button which validates user upon click and if successful displays
+     * any upcoming appointments
+     * @param event
+     * @throws IOException
+     */
     public void LoginButton(ActionEvent event) throws IOException {
         try {
             ObservableList<Appointment> getAllAppointments = AppointmentDB.getAllAppointments();
@@ -113,6 +120,11 @@ public class LoginFormController implements Initializable {
         }
     }
 
+    /**
+     * loads time zone defaults along with language to display
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -132,6 +144,11 @@ public class LoginFormController implements Initializable {
 
 
     }
+
+    /**
+     * Confirmation Alert
+     * @param error
+     */
     public  void appointmentValidations(String error) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, error);
         Optional<ButtonType> confirm = alert.showAndWait();

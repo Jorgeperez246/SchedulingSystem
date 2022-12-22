@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Month;
 
+/**
+ * displays monthly reports, contact reports, as well as country report
+ */
 public class ReportFormController {
     public TableView<ReportMonth> AppointmentInfoTable;
     public TableColumn<?,?> AppMonthCol;
@@ -49,6 +52,11 @@ public class ReportFormController {
     public TableColumn<?,?> CustomersPerCountry;
     public TableColumn<?,?> CountryCol;
 
+    /**
+     * returns you to the MainForm
+     * @param event
+     * @throws IOException
+     */
     public void backButton(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/MainForm.fxml"));
         Scene scene = new Scene(root);
@@ -57,11 +65,21 @@ public class ReportFormController {
         MainScreenReturn.show();
     }
 
+    /**
+     * closes application
+     * @param event
+     */
     public void logOutButton(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * fills tables with needed report data from database as well as
+     * the combobox customer selection
+     * Lambda used to fill contact names into ContactCombo combo box
+     * @throws SQLException
+     */
     public void initialize() throws SQLException {
 
 
@@ -94,10 +112,15 @@ public class ReportFormController {
 
         ObservableList<Contact> contactsObservableList = ContactDB.getAllContacts();
         ObservableList<String> allContactsNames = FXCollections.observableArrayList();
+        // lambda used here
         contactsObservableList.forEach(contacts -> allContactsNames.add(contacts.getContactName()));
         ContactCombo.setItems(allContactsNames);
 
     }
+
+    /**
+     * changes ReportTable depending on which contact was chosen
+     */
     @FXML
     public void getAppointmentInfo() {
         try {
