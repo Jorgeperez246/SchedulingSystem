@@ -8,22 +8,20 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import sample.DAO.CountryDB;
-import sample.DAO.CustomerDB;
-import sample.DAO.FirstLevelDivisionDB;
-import sample.DAO.JDBC;
+import sample.DAO.*;
+import sample.model.Appointment;
 import sample.model.Country;
 import sample.model.Customer;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CustomerFormController {
@@ -75,8 +73,35 @@ public class CustomerFormController {
     }
 
 
-    public void deleteButton(ActionEvent event) {
+    public void deleteButton(ActionEvent event) throws SQLException {
+
+        ObservableList<Appointment> getAllAppointmentsList = AppointmentDB.getAllAppointments();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete the selected customer and all appointments? ");
+        Optional<ButtonType> confirmation = alert.showAndWait();
+        if (confirmation.isPresent() && confirmation.get() == ButtonType.OK) {
+
+
+
+            String query = "DELETE FROM customers WHERE Customer_ID = ?";
+            JDBC.makePreparedStatement(query, JDBC.getConnection());
+
+            PreparedStatement delete = JDBC.getPreparedStatement();
+            int customerSelection = CustomerTable.getSelectionModel().getSelectedItem().getCustomerId();
+
+            for (Appointment appointment : getAllAppointmentsList) {
+                if (appointment.getCustomerId() == customerSelection) {
+                    JDBC.makePreparedStatement("DELETE FROM appointments WHERE Appointment_ID = ?", JDBC.getConnection());
+                }
+            }
+
+            delete.setInt(1, customerSelection);
+            delete.execute();
+            ObservableList<Customer> newCustomersList = CustomerDB.getAllCustomers();
+            CustomerTable.setItems(newCustomersList);
+        }
     }
+
 
     public void backButton(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/MainForm.fxml"));

@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class Main extends Application {
 
@@ -22,6 +23,7 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+//        Locale.setDefault(Locale.FRENCH);
         JDBC.makeConnection();
         launch(args);
 

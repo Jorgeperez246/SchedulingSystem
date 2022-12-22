@@ -1,17 +1,17 @@
 package sample.controller;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import sample.DAO.AppointmentDB;
 import sample.DAO.UserCredentials;
+import sample.model.Appointment;
 import sample.model.User;
 
 import java.io.BufferedWriter;
@@ -24,15 +24,17 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
+import java.util.*;
 
 
 public class LoginFormController implements Initializable {
 
 
+    public Label Location;
+    public Label UserNameLabel;
+    public Label PasswordLabel;
+    public Label LocationLabel;
+    public Label LoginLabel;
     @FXML
     private TextField UserNameText;
     @FXML
@@ -40,15 +42,20 @@ public class LoginFormController implements Initializable {
     @FXML
     private Button Login;
 
-    private static final String FILENAME = "loginMonitor.txt";
+
 
 
     public void LoginButton(ActionEvent event) throws IOException {
         try {
+            ObservableList<Appointment> getAllAppointments = AppointmentDB.getAllAppointments();
+            Locale systemLocale = Locale.getDefault();
+            ResourceBundle messages = ResourceBundle.getBundle("sample.languages.LoginForm",systemLocale);
+            LocalDateTime start = null;
+            boolean upcomingAppointments = false;
+            LocalDateTime nowMinus15 =LocalDateTime.now().minusMinutes(15);
+            LocalDateTime nowPlus15 = LocalDateTime.now().plusMinutes(15);
+            int upcomingApp = 1;
 
-            /*gets text from textfields and later compares with username and pass
-            * in database, will print successful and unsuccessful attempts to
-            * loginMonitor file*/
             String usernameInput = UserNameText.getText();
             String passwordInput = PasswordText.getText();
             int userId = UserCredentials.userValidation(usernameInput, passwordInput);
@@ -66,12 +73,31 @@ public class LoginFormController implements Initializable {
                 stage.show();
 
 
+
                 outputFile.print("user: " + usernameInput + " successfully logged in at: " + Timestamp.valueOf(LocalDateTime.now()) + "\n");
 
+                for (Appointment appointment: getAllAppointments){
+                    start = appointment.getStart();
+                    if((start.isAfter(nowMinus15)||start.isEqual(nowMinus15)&&(start.isBefore(nowPlus15)||start.isEqual(nowPlus15)))){
+                        upcomingApp = appointment.getAppointmentId();
+
+                        upcomingAppointments = true;
+                    }
+
+                }
+                if (upcomingAppointments){
+
+                    appointmentValidations("Appointment is within 15 minute interval: " + upcomingApp + "\n Appointments starts: " + start);
+
+
+                }
+                else {
+                    appointmentValidations("No upcoming appointments");
+                }
             } else if (userId < 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText("Incorrect");
+                alert.setTitle(messages.getString("Error"));
+                alert.setContentText(messages.getString("Incorrect"));
                 alert.show();
 
 
@@ -82,11 +108,35 @@ public class LoginFormController implements Initializable {
 
         } catch (IOException ioException) {
             ioException.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        TimeZone systemTimeZone = TimeZone.getDefault();
+        String locationZone = systemTimeZone.getID();
+        Location.setText(locationZone);
+
+        Locale systemLocale = Locale.getDefault();
+
+        ResourceBundle messages = ResourceBundle.getBundle("sample.languages.LoginForm",systemLocale);
+
+        UserNameLabel.setText(messages.getString("Username"));
+        PasswordLabel.setText(messages.getString("Password"));
+        LocationLabel.setText(messages.getString("Location"));
+        Login.setText(messages.getString("Login"));
+        LoginLabel.setText(messages.getString("Login"));
+
+
+    }
+    public  void appointmentValidations(String error) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, error);
+        Optional<ButtonType> confirm = alert.showAndWait();
+
+
 
 
 

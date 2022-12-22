@@ -10,13 +10,13 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.LoginFormController">
    <children>
-      <Label layoutX="203.0" layoutY="35.0" prefHeight="37.0" prefWidth="100.0" text="Login">
+      <Label fx:id="LoginLabel" alignment="CENTER" layoutX="130.0" layoutY="53.0" prefHeight="46.0" prefWidth="226.0" text="Login" wrapText="true">
          <font>
             <Font name="System Bold" size="31.0" />
          </font>
       </Label>
       <Line endX="-1.52587890625E-5" endY="144.0" startX="500.0" startY="144.0" />
-      <TextField fx:id="UserNameText" layoutX="130.0" layoutY="193.0" prefHeight="35.0" prefWidth="226.0" promptText="Username">
+      <TextField fx:id="UserNameText" layoutX="130.0" layoutY="193.0" prefHeight="35.0" prefWidth="226.0">
          <font>
             <Font size="16.0" />
          </font>
@@ -26,10 +26,30 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <PasswordField fx:id="PasswordText" layoutX="130.0" layoutY="265.0" prefHeight="35.0" prefWidth="226.0" promptText="Password">
+      <PasswordField fx:id="PasswordText" layoutX="130.0" layoutY="274.0" prefHeight="35.0" prefWidth="226.0">
          <font>
             <Font size="16.0" />
          </font>
       </PasswordField>
+      <Label fx:id="UserNameLabel" layoutX="130.0" layoutY="160.0" prefHeight="27.0" prefWidth="200.0" text="Username">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="PasswordLabel" layoutX="130.0" layoutY="238.0" prefHeight="27.0" prefWidth="200.0" text="Password">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="LocationLabel" layoutX="130.0" layoutY="449.0" prefHeight="27.0" prefWidth="79.0" text="Location:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="Location" layoutX="230.0" layoutY="449.0" prefHeight="27.0" prefWidth="186.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

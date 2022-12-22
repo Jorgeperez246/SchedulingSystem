@@ -46,7 +46,7 @@ public class ReportFormController {
 
 
     public TableView<ReportCountries> CountryAppointments;
-    public TableColumn<?,?> CountryTotalAppCol;
+    public TableColumn<?,?> CustomersPerCountry;
     public TableColumn<?,?> CountryCol;
 
     public void backButton(ActionEvent event) throws IOException {
@@ -86,7 +86,7 @@ public class ReportFormController {
 
         ObservableList<ReportCountries> allCountryReportList = ReportCountriesDB.getCountries();
         CountryCol.setCellValueFactory(new PropertyValueFactory<>("countryName"));
-        CountryTotalAppCol.setCellValueFactory(new PropertyValueFactory<>("numOfAppPerCountry"));
+        CustomersPerCountry.setCellValueFactory(new PropertyValueFactory<>("numOfAppPerCountry"));
 
         CountryAppointments.setItems(allCountryReportList);
 
