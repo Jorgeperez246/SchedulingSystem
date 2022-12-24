@@ -67,7 +67,7 @@ public class LoginFormController implements Initializable {
             String passwordInput = PasswordText.getText();
             int userId = UserCredentials.userValidation(usernameInput, passwordInput);
 
-            FileWriter fileWriter = new FileWriter("loginMonitor.txt", true);
+            FileWriter fileWriter = new FileWriter("login_activity.txt", true);
             PrintWriter outputFile = new PrintWriter(fileWriter);
 
             if (userId > 0) {
