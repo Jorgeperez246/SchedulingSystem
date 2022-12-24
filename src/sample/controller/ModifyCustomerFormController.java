@@ -157,4 +157,30 @@ public class ModifyCustomerFormController {
 
 
     }
+    /**
+     * filters State comboBox based on value from Country comboBox
+     * @param event
+     * @throws SQLException
+     */
+    public void pickCountry(ActionEvent event) throws SQLException {
+
+        ObservableList<FirstLevelDivisionDB> firstLevelDivisionObservableList = FirstLevelDivisionDB.getAllFirstLevelDivisions();
+        ObservableList<String> allFirstLevelDivisionNames = FXCollections.observableArrayList();
+        String selectedValue = Country.getValue();
+        for (FirstLevelDivisionDB firstLevelDivisionDB : firstLevelDivisionObservableList) {
+            int id = firstLevelDivisionDB.getDivisionId();
+            if (selectedValue.equals("U.S") && id >= 1 && id <= 54) {
+                allFirstLevelDivisionNames.add(firstLevelDivisionDB.getDivisionName());
+                State.setItems(allFirstLevelDivisionNames);
+            } else if (selectedValue.equals("UK") && id >= 101 && id <= 104) {
+                allFirstLevelDivisionNames.add(firstLevelDivisionDB.getDivisionName());
+                State.setItems(allFirstLevelDivisionNames);
+            } else if (selectedValue.equals("Canada") && id >= 60 && id <= 72) {
+                allFirstLevelDivisionNames.add(firstLevelDivisionDB.getDivisionName());
+                State.setItems(allFirstLevelDivisionNames);
+//        System.out.println(selectedValue);
+            }
+
+        }
+    }
 }

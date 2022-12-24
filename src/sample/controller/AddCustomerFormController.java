@@ -42,6 +42,7 @@ public class AddCustomerFormController {
 
     /**
      * takes you back to CustomerForm
+     *
      * @param event
      * @throws IOException
      */
@@ -55,14 +56,14 @@ public class AddCustomerFormController {
 
     /**
      * adds customer data to database
+     *
      * @param event
      */
     public void saveButton(ActionEvent event) {
         try {
 
 
-            if (!CustomerName.getText().isEmpty() || !CustomerAddress.getText().isEmpty() || !PostalCode.getText().isEmpty() || !PhoneNumber.getText().isEmpty() || !Country.getValue().isEmpty() || !State.getValue().isEmpty())
-            {
+            if (!CustomerName.getText().isEmpty() || !CustomerAddress.getText().isEmpty() || !PostalCode.getText().isEmpty() || !PhoneNumber.getText().isEmpty() || !Country.getValue().isEmpty() || !State.getValue().isEmpty()) {
 
                 //create random ID for new customer id
                 Integer newCustomerID = (int) (Math.random() * 100);
@@ -113,9 +114,10 @@ public class AddCustomerFormController {
 
     /**
      * prefills combo boxes with Lambda functions
+     *
      * @throws SQLException
      */
-    public void initialize() throws SQLException{
+    public void initialize() throws SQLException {
         ObservableList<CountryDB> countriesObservableList = CountryDB.getCountries();
         ObservableList<String> allCountryNames = FXCollections.observableArrayList();
 
@@ -123,13 +125,68 @@ public class AddCustomerFormController {
         ObservableList<String> allFirstLevelDivisionNames = FXCollections.observableArrayList();
 
         //lambda here
-        countriesObservableList.forEach(countries ->allCountryNames.add(countries.getCountryName()) );
+        countriesObservableList.forEach(countries -> allCountryNames.add(countries.getCountryName()));
 
         firstLevelDivisionObservableList.forEach(firstLevelDivisionDB -> allFirstLevelDivisionNames.add(firstLevelDivisionDB.getDivisionName()));
         Country.setItems(allCountryNames);
         State.setItems(allFirstLevelDivisionNames);
 
 
+    }
 
+    /**
+     * filters State comboBox based on value from Country comboBox
+     * @param event
+     * @throws SQLException
+     */
+    public void pickCountry(ActionEvent event) throws SQLException {
+
+        ObservableList<FirstLevelDivisionDB> firstLevelDivisionObservableList = FirstLevelDivisionDB.getAllFirstLevelDivisions();
+        ObservableList<String> allFirstLevelDivisionNames = FXCollections.observableArrayList();
+        String selectedValue = Country.getValue();
+        for (FirstLevelDivisionDB firstLevelDivisionDB : firstLevelDivisionObservableList) {
+            int id = firstLevelDivisionDB.getDivisionId();
+            if (selectedValue.equals("U.S") && id >= 1 && id <= 54) {
+                allFirstLevelDivisionNames.add(firstLevelDivisionDB.getDivisionName());
+                State.setItems(allFirstLevelDivisionNames);
+            } else if (selectedValue.equals("UK") && id >= 101 && id <= 104) {
+                allFirstLevelDivisionNames.add(firstLevelDivisionDB.getDivisionName());
+                State.setItems(allFirstLevelDivisionNames);
+            } else if (selectedValue.equals("Canada") && id >= 60 && id <= 72) {
+                allFirstLevelDivisionNames.add(firstLevelDivisionDB.getDivisionName());
+                State.setItems(allFirstLevelDivisionNames);
+//        System.out.println(selectedValue);
+            }
+
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
