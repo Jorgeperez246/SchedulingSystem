@@ -22,6 +22,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -85,20 +86,16 @@ public class LoginFormController implements Initializable {
 
                 for (Appointment appointment: getAllAppointments){
                     start = appointment.getStart();
-                    if((start.isAfter(nowMinus15)||start.isEqual(nowMinus15)&&(start.isBefore(nowPlus15)||start.isEqual(nowPlus15)))){
+                    LocalDate now = LocalDate.now();
+                    //System.out.println(start.toLocalDate());
+                    if((start.isAfter(nowMinus15)||start.isEqual(nowMinus15)) && (start.isBefore(nowPlus15)||start.isEqual(nowPlus15)) && start.toLocalDate().isEqual(now)){
                         upcomingApp = appointment.getAppointmentId();
-
                         upcomingAppointments = true;
                     }
-
                 }
                 if (upcomingAppointments){
-
                     appointmentValidations("Appointment is within 15 minute interval: " + upcomingApp + "\n Appointments starts: " + start);
-
-
-                }
-                else {
+                } else {
                     appointmentValidations("No upcoming appointments");
                 }
             } else if (userId < 0) {
