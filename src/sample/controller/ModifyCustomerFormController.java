@@ -3,7 +3,9 @@ package sample.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -36,6 +38,7 @@ public class ModifyCustomerFormController {
     public TextField PhoneNumber;
     public Button Cancel;
     public Button Save;
+    @FXML
     public ComboBox<String> Country;
     public ComboBox<String> State;
 
@@ -112,7 +115,7 @@ public class ModifyCustomerFormController {
      * @param selectedIndex
      * @param selectedCustomer
      */
-    public void sendCustomerToModify(int selectedIndex, Customer selectedCustomer){
+    public void sendCustomerToModify(int selectedIndex, Customer selectedCustomer) throws SQLException {
 
         index = selectedIndex;
         CustomerId.setText(String.valueOf(selectedCustomer.getCustomerId()));
@@ -125,7 +128,7 @@ public class ModifyCustomerFormController {
 
 
 
-
+        pickCountry(new ActionEvent());
 
     }
 
@@ -134,7 +137,7 @@ public class ModifyCustomerFormController {
      * @throws SQLException
      */
     public void initialize() throws SQLException {
-        String selectedCountry = Country.getSelectionModel().getSelectedItem();
+
 
         ObservableList<Customer> allCustomersList = CustomerDB.getAllCustomers();
 
@@ -151,7 +154,6 @@ public class ModifyCustomerFormController {
 
         Country.setItems(allCountryNames);
 
-        State.setItems(allFirstLevelDivisionNames);
 
 
 
