@@ -99,9 +99,10 @@ public class AppointmentFormController{
         try {
             Connection connection = JDBC.getConnection();
             int selectedAppointment = AppointmentTable.getSelectionModel().getSelectedItem().getAppointmentId();
+            String appointmentType = AppointmentTable.getSelectionModel().getSelectedItem().getType();
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete the selected appointment with appointment id: " +
-                    selectedAppointment);
+                    selectedAppointment +" and appointment type: " +appointmentType);
             Optional<ButtonType> confirm = alert.showAndWait();
 
             if (confirm.isPresent() && confirm.get() == ButtonType.OK) {
